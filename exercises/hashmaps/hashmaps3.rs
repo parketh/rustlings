@@ -40,6 +40,28 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
         // will be the number of goals conceded from team_2, and similarly
         // goals scored by team_2 will be the number of goals conceded by
         // team_1.
+        
+        fn register_score(scores: &mut HashMap<String, Team>, team_name: String, goals_scored: u8, goals_conceded: u8) {
+            if scores.contains_key(&team_name) {
+                let team = scores.get(&team_name).unwrap();
+                let updated_team = Team {
+                    name: team.name,
+                    goals_scored: team.goals_scored + goals_scored,
+                    goals_conceded: team.goals_conceded + goals_conceded
+                };
+                scores.insert(team_name.clone(), updated_team);
+            } else {
+                let team = Team {
+                    name: team_name.clone(),
+                    goals_scored,
+                    goals_conceded,
+                };
+                scores.insert(team_name.clone(), team);
+            }
+        }
+
+        register_score(&scores, team_1_name.clone(), team_1_score, team_2_score );
+        register_score(&scores, team_2_name.clone(), team_2_score, team_1_score );
     }
     scores
 }
